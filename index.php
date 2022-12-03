@@ -41,6 +41,51 @@
     ];
 
 
+ $fiteredHotels = $hotels;
+ 
+if(!empty($_GET['parking']) ){
+
+  $secArray = [];
+
+  foreach($fiteredHotels as $hotel){
+    if($hotel['parking']){
+      $secArray[] = $hotel;
+    }
+  }
+  $fiteredHotels = $secArray;
+
+}
+
+if(isset($_GET['parking']) && empty($_GET['parking'])){
+
+  $secArray = [];
+
+  foreach($fiteredHotels as $hotel){
+    if(!$hotel['parking']){
+      $secArray[] = $hotel;
+    }
+  }
+  $fiteredHotels = $secArray;
+
+}
+
+
+
+if(!empty($_GET['voto']) ){
+
+  $secArray = [];
+
+  foreach($fiteredHotels as $hotel){
+   if ($hotel['vote'] >= $_GET['voto']) {
+    $secArray[] = $hotel;
+    }
+  }
+
+  $fiteredHotels = $secArray;
+
+}
+
+
 
 ?>
 
@@ -68,11 +113,17 @@
 
 <form action="./index.php" method="GET">
 
-<input class="me-1" type="radio" name="Parking_yes" id="yes">
+  <input class="me-1" type="radio" name="parking" id="yes" value="1">
 <label for="yes">Con Parcheggio</label>
-<input class="ms-5" type="radio" name="Parking_no" id="no">
+
+<input class="ms-5" type="radio" name="parking" id="no" value=""  >
 <label for="no">Senza Parcheggio</label>
-  
+
+<label class="ms-5" for="">Voto</label>
+<input class="me-5" type="number" name="voto">
+
+<button class="btn btn-primary ms-5" type="submit">Send</button>
+
 </form>
 
 </div>
@@ -90,23 +141,21 @@
     </tr>
    
   </thead>
-  <tbody>
- <?php foreach($hotels as $hotel){
-    if($hotel['parking'] === false){
-      $hotel['parking'] = 'No';
-    }else{
-      $hotel['parking'] = 'Si';
-    };
-      echo '<tr>';
-      echo '<td>' . $hotel['name'] . '</td>';
-      echo '<td>' . $hotel['description'] . '</td>';
-      echo '<td>' . $hotel['parking'] . '</td>';
-      echo '<td>' . $hotel['vote'] . '</td>';
-      echo '<td>' . $hotel['distance_to_center'] . '</td>';
-      echo '</tr>';
-    };
+  <tbody  >
+ <?php foreach($fiteredHotels as $hotel){
+
+  echo '<tr>';
+  echo '<td>' . $hotel['name'] . '</td>';
+  echo '<td>' . $hotel['description'] . '</td>';
+  echo '<td>' . ($hotel['parking'] ? 'Si': 'No'). '</td>';
+  echo '<td>' . $hotel['vote'] . '</td>';
+  echo '<td>' . $hotel['distance_to_center'] . '</td>';
+  echo '</tr>';
+
+    }
  ?>
   </tbody>
+
 </table>
 </div>
 
